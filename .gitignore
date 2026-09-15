@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+adapter_ckpt/
+logs/
+preds/*.jsonl
+!preds/.gitkeep
