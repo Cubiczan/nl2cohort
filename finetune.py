@@ -6,7 +6,7 @@ the extra step buys something.
 
 LoRA rather than full fine-tuning because the task is narrow -- we are teaching an output
 format and a six-item vocabulary, not new knowledge. Rank 16 on the attention projections is
-about 1% of the parameters and trains on CPU in a sensible amount of time.
+about 0.4% of the parameters and trains on CPU in a sensible amount of time.
 """
 import argparse, json, time
 from pathlib import Path

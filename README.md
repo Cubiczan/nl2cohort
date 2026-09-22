@@ -65,16 +65,19 @@ component does the *generation*.
 ## Training data is synthesised from the registry
 
 No labelling and no scraped corpus. The registry already declares every legal cohort, measure
-and dimension, so the supervision is free and the output space is enumerable — 744 legal
-programs.
+and dimension, so the supervision is free and the output space is enumerable — 504 legal
+programs (6 legal cohort targets × 21 legal measure names × 3 dimensions, each grouped or
+ungrouped).
 
 ```bash
-python gen_pairs.py       # 882 train / 294 held out
+python gen_pairs.py       # regenerates data/ from the registry in the tree
 ```
 
 **The split is by template, not random.** A random split puts the same phrasing in train and
 test, and then the eval measures memorisation. The held-out set uses four phrasings — `rank {d}
 by {c}`, `I need {m} on {c}`, and two others — that appear nowhere in training.
+
+The committed `data/` split is the five-measure-era snapshot the adapter was trained and evaluated on — 882 train / 294 held out, generated before the procurement measures joined the registry. `gen_pairs.py` regenerates the split from whatever registry is in the tree, so regenerating against today's registry produces a larger split than the committed one.
 
 ## Run it
 
@@ -159,6 +162,10 @@ start to struggle.
 **Exact match is the weak metric.** 55% looks poor next to 97.5% cohort accuracy, and most of
 the gap is measure selection on genuinely ambiguous phrasings. Arguably the registry should
 declare a default measure per cohort.
+
+## Evidence matrix
+
+Every capability claim in this file is backed by [`evidence/matrix.yaml`](evidence/matrix.yaml), and CI runs the fail-closed verifier ([`tools/verify_evidence_matrix.py`](tools/verify_evidence_matrix.py), vendored byte-identical from [`icohangar-ops/consensus-hardening-protocol`](https://github.com/icohangar-ops/consensus-hardening-protocol); provenance stamp at [`tools/EVIDENCE_MATRIX_VENDOR.txt`](tools/EVIDENCE_MATRIX_VENDOR.txt)) on every change — while any row is unverifiable, the build fails.
 
 ## Licence
 

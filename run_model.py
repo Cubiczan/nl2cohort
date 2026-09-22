@@ -1,7 +1,7 @@
 """Run a small local model over the held-out set: few-shot, or with a fine-tuned adapter.
 
 Few-shot is tried FIRST and on purpose. Fine-tuning is the expensive answer and it is worth
-knowing whether the task needs it -- the output space here is 744 legal programs, which is
+knowing whether the task needs it -- the output space here is 504 legal programs, which is
 small enough that a 0.5B instruct model may already be able to pick from it.
 """
 import argparse, json, time, sys
