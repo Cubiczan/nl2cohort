@@ -143,6 +143,15 @@ test generalisation across phrasing, but not across the distribution of how peop
 type. Paraphrase augmentation through a larger model is the obvious next step and
 `run_api.py --mode paraphrase` exists for it.
 
+### Procurement metric qualification
+
+The shared registry contains generic contracts for `spend`, `landed_cost`, `gross_margin`,
+`dso`, `dio`, `dpo`, `ccc`, and `value_pool`. These terms are not emitted bare: the NL prompt
+vocabulary exposes named definitions such as `spend@cash_paid`, `landed_cost@fully_loaded`, and
+`value_pool@realizable`. This prevents the model from silently choosing an accounting boundary
+or working-capital denominator. The expressions are examples and must be replaced by approved
+warehouse contracts before production reporting.
+
 **Six cohorts.** The registry is deliberately small. Whether this holds at 60 cohorts is
 untested, and recall over a larger closed vocabulary is exactly where a small model should
 start to struggle.

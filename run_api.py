@@ -31,7 +31,12 @@ Valid cohorts:
   trial_active                named principal investigators
   untapped_bench              industry ties, never a principal investigator
 
-Valid measures: count, clinicians, industry_usd, research_usd, avg_score
+Valid measures: count, clinicians, industry_usd, research_usd, avg_score,
+  spend@cash_paid, spend@invoiced, landed_cost@ex_works, landed_cost@fully_loaded,
+  gross_margin@revenue_less_landed_cost, gross_margin@revenue_percent,
+  dso@ending_balance, dso@average_balance, dio@ending_balance, dio@average_balance,
+  dpo@ending_balance, dpo@average_balance, ccc@operating, ccc@average_balance,
+  value_pool@addressable, value_pool@realizable
 Valid dimensions: state, x_cloud_abbrev, subspecialty
 
 `psychiatrists` alone is NOT valid -- always choose one of the three qualified forms.

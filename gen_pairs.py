@@ -61,8 +61,18 @@ def targets_from_registry(reg):
     return out
 
 
+def measures_from_registry(reg):
+    """Return legal DSL names; ambiguous business terms are never generated bare."""
+    out = []
+    for name, spec in reg["measures"].items():
+        multi = spec.get("ambiguous") or len(spec["definitions"]) > 1
+        for variant in spec["definitions"]:
+            out.append(f"{name}@{variant}" if multi else name)
+    return out
+
+
 def build(reg, templates, dims):
-    measures = list(reg["measures"].keys())
+    measures = measures_from_registry(reg)
     rows, seen = [], set()
     for target in targets_from_registry(reg):
         for alias in ALIASES.get(target, [target]):
@@ -111,7 +121,7 @@ def main():
 
     print(f"\n  templates: {len(TEMPLATES_TRAIN)} train / {len(TEMPLATES_HELDOUT)} held out")
     print(f"  cohorts  : {len(targets_from_registry(reg))}")
-    print(f"  measures : {len(reg['measures'])}")
+    print(f"  measures : {len(measures_from_registry(reg))} legal names")
     print(f"  NOTE: held-out phrasings never appear in training.")
 
 
