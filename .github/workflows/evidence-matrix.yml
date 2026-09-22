@@ -1,0 +1,28 @@
+name: evidence-matrix
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  # Fail-closed claim verification. Runs BEFORE any install step: no secrets,
+  # no service containers, stdlib python3 only — a repo whose claims cannot be
+  # verified from its own tree cannot look decision-ready.
+  evidence-matrix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify evidence matrix
+        run: python3 tools/verify_evidence_matrix.py
+
+  # Contract tests for the registry and the compile gate (stdlib + PyYAML).
+  registry-contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install pyyaml
+      - run: python3 -m unittest test_registry test_evaluate_gate -v

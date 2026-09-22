@@ -1,0 +1,39 @@
+{
+  "recorded_run": {
+    "provenance": "Transcribed from the README result tables at evidence-matrix adoption (2026-09-22). Values are recorded experiment results, re-measurable only by re-running the pipeline (fine-tune and hosted baseline); the evidence matrix pins them so the README tables and this manifest cannot drift apart.",
+    "full_set": {
+      "n": 294,
+      "compiles_pct": 95.9,
+      "cohort_pct": 94.6,
+      "exact_pct": 53.1,
+      "rejections_total": 12,
+      "rejections_unknown_measure_rank": 12
+    },
+    "h2h_40": {
+      "n": 40,
+      "arms": {
+        "fewshot_local": {
+          "compiles_pct": 65.0,
+          "cohort_pct": 42.5,
+          "exact_pct": 17.5
+        },
+        "hosted_qwen36_zeroshot": {
+          "compiles_pct": 80.0,
+          "cohort_pct": 87.5,
+          "exact_pct": 70.0
+        },
+        "tuned_lora": {
+          "compiles_pct": 97.5,
+          "cohort_pct": 97.5,
+          "exact_pct": 55.0
+        }
+      }
+    },
+    "training": {
+      "minutes": 66,
+      "device": "cpu",
+      "trainable_params_M": 2.2,
+      "trainable_pct": 0.44
+    }
+  }
+}

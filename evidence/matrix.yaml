@@ -1,0 +1,328 @@
+# Evidence matrix — nl2cohort (schema v1).
+#
+# Every capability claim stated in README.md (and the adapter model card) is bound
+# here to deterministic evidence. The vendored fail-closed verifier
+# (tools/verify_evidence_matrix.py) re-executes this matrix on every CI run;
+# while any row is unverifiable the build fails. There is no skip flag.
+#
+# Claim texts are verbatim or tight paraphrases of the stated claims; the numbers
+# in them are pinned, not decorative. Two claim texts are REWORDED relative to the
+# original README (C011: "744 legal programs" -> the derivable 504; C012: the
+# gen_pairs comment now states the committed snapshot's provenance) — the rewords
+# are visible in the adopting PR diff.
+schema_version: 1
+repo: nl2cohort
+claims:
+  - id: C001
+    claim: >-
+      A 0.5B model, fine-tuned on a laptop CPU, beats a frontier model at the job
+      it was given: on the shared 40-item subset the fine-tuned arm wins compile
+      rate (97.5% vs 80.0%) and correct-cohort (97.5% vs 87.5%).
+    source: "README.md"
+    evidence:
+      - type: manifest_field
+        ref: "evidence/results.json:recorded_run.h2h_40.arms.tuned_lora.compiles_pct"
+        equals: 97.5
+      - type: manifest_field
+        ref: "evidence/results.json:recorded_run.h2h_40.arms.hosted_qwen36_zeroshot.compiles_pct"
+        equals: 80.0
+      - type: manifest_field
+        ref: "evidence/results.json:recorded_run.h2h_40.arms.tuned_lora.cohort_pct"
+        equals: 97.5
+      - type: manifest_field
+        ref: "evidence/results.json:recorded_run.h2h_40.arms.hosted_qwen36_zeroshot.cohort_pct"
+        equals: 87.5
+      - type: script
+        ref: "scripts/verify_results.py"
+        timeout_seconds: 60
+
+  - id: C002
+    claim: >-
+      Full held-out set — 294 items: the fine-tuned arm compiles 95.9%, picks the
+      right cohort 94.6%, exact match 53.1%.
+    source: "README.md#the-result"
+    evidence:
+      - type: manifest_field
+        ref: "evidence/results.json:recorded_run.full_set.n"
+        equals: 294
+      - type: manifest_field
+        ref: "evidence/results.json:recorded_run.full_set.compiles_pct"
+        equals: 95.9
+      - type: manifest_field
+        ref: "evidence/results.json:recorded_run.full_set.cohort_pct"
+        equals: 94.6
+      - type: manifest_field
+        ref: "evidence/results.json:recorded_run.full_set.exact_pct"
+        equals: 53.1
+      - type: artifact_hash
+        ref: "data/test.jsonl"
+        sha256: "734657fc93487f3acb35fa84f1aff5f3b4c49ae690a2455d8d580504103b9b12"
+      - type: script
+        ref: "scripts/verify_results.py"
+        timeout_seconds: 60
+
+  - id: C003
+    claim: >-
+      Head-to-head on a common 40-item subset — few-shot local 65.0% compiles /
+      42.5% right cohort / 17.5% exact; qwen3.6 hosted zero-shot 80.0 / 87.5 /
+      70.0; fine-tuned 97.5 / 97.5 / 55.0. The fine-tuned numbers match its
+      full-set result closely, so the sample is not flattering it.
+    source: "README.md#the-result"
+    evidence:
+      - type: manifest_field
+        ref: "evidence/results.json:recorded_run.h2h_40.n"
+        equals: 40
+      - type: manifest_field
+        ref: "evidence/results.json:recorded_run.h2h_40.arms.fewshot_local.compiles_pct"
+        equals: 65.0
+      - type: manifest_field
+        ref: "evidence/results.json:recorded_run.h2h_40.arms.fewshot_local.cohort_pct"
+        equals: 42.5
+      - type: manifest_field
+        ref: "evidence/results.json:recorded_run.h2h_40.arms.fewshot_local.exact_pct"
+        equals: 17.5
+      - type: manifest_field
+        ref: "evidence/results.json:recorded_run.h2h_40.arms.hosted_qwen36_zeroshot.compiles_pct"
+        equals: 80.0
+      - type: manifest_field
+        ref: "evidence/results.json:recorded_run.h2h_40.arms.hosted_qwen36_zeroshot.cohort_pct"
+        equals: 87.5
+      - type: manifest_field
+        ref: "evidence/results.json:recorded_run.h2h_40.arms.hosted_qwen36_zeroshot.exact_pct"
+        equals: 70.0
+      - type: manifest_field
+        ref: "evidence/results.json:recorded_run.h2h_40.arms.tuned_lora.compiles_pct"
+        equals: 97.5
+      - type: manifest_field
+        ref: "evidence/results.json:recorded_run.h2h_40.arms.tuned_lora.cohort_pct"
+        equals: 97.5
+      - type: manifest_field
+        ref: "evidence/results.json:recorded_run.h2h_40.arms.tuned_lora.exact_pct"
+        equals: 55.0
+      - type: script
+        ref: "scripts/verify_results.py"
+        timeout_seconds: 60
+
+  - id: C004
+    claim: >-
+      It essentially never invents a cohort: correct-cohort is 94.6% on the full
+      held-out set and 97.5% on the subset.
+    source: "README.md#the-result"
+    evidence:
+      - type: manifest_field
+        ref: "evidence/results.json:recorded_run.full_set.cohort_pct"
+        equals: 94.6
+      - type: manifest_field
+        ref: "evidence/results.json:recorded_run.h2h_40.arms.tuned_lora.cohort_pct"
+        equals: 97.5
+      - type: script
+        ref: "scripts/verify_results.py"
+        timeout_seconds: 60
+
+  - id: C005
+    claim: >-
+      Training cost: 66 minutes on a laptop CPU, 2.2M trainable parameters (0.44%
+      of the model), no GPU.
+    source: "README.md#the-result"
+    evidence:
+      - type: manifest_field
+        ref: "evidence/results.json:recorded_run.training.minutes"
+        equals: 66
+      - type: manifest_field
+        ref: "evidence/results.json:recorded_run.training.trainable_params_M"
+        equals: 2.2
+      - type: manifest_field
+        ref: "evidence/results.json:recorded_run.training.trainable_pct"
+        equals: 0.44
+      - type: script
+        ref: "scripts/verify_adapter.py"
+        timeout_seconds: 60
+      - type: script
+        ref: "scripts/verify_local_inference.py"
+        timeout_seconds: 60
+
+  - id: C006
+    claim: >-
+      Inference is local and free: the hosted endpoint is used only for offline
+      baselines and paraphrase generation, never at query time.
+    source: "README.md#what-this-is-not"
+    evidence:
+      - type: script
+        ref: "scripts/verify_local_inference.py"
+        timeout_seconds: 60
+
+  - id: C007
+    claim: >-
+      Every model output passes through cohortc, which either compiles it or
+      refuses — a wrong answer becomes a non-zero exit code, never a plausible
+      number.
+    source: "README.md#why-route-through-a-compiler-at-all"
+    evidence:
+      - type: test
+        ref: "test_evaluate_gate.py::CompileGateTests::test_refused_program_is_counted_as_failure_never_scored"
+      - type: test
+        ref: "test_evaluate_gate.py::CompileGateTests::test_compiling_program_passes_the_gate"
+
+  - id: C008
+    claim: >-
+      35% of the time the few-shot model produced nonsense, and none of it became
+      an answer.
+    source: "README.md#why-route-through-a-compiler-at-all"
+    evidence:
+      - type: manifest_field
+        ref: "evidence/results.json:recorded_run.h2h_40.arms.fewshot_local.compiles_pct"
+        equals: 65.0
+      - type: script
+        ref: "scripts/verify_results.py"
+        timeout_seconds: 60
+      - type: test
+        ref: "test_evaluate_gate.py::CompileGateTests::test_refused_program_is_counted_as_failure_never_scored"
+
+  - id: C009
+    claim: >-
+      How many psychiatrists? returns 51,964 or 41,823 or 22,956 depending on
+      which column you believe — the registry records all three measured sizes.
+    source: "README.md#why-route-through-a-compiler-at-all"
+    evidence:
+      - type: manifest_field
+        ref: "registry/cohorts.yaml:cohorts.psychiatrists.definitions.xcloud.measured"
+        equals: 51964
+      - type: manifest_field
+        ref: "registry/cohorts.yaml:cohorts.psychiatrists.definitions.nucc.measured"
+        equals: 41823
+      - type: manifest_field
+        ref: "registry/cohorts.yaml:cohorts.psychiatrists.definitions.subspecialty.measured"
+        equals: 22956
+
+  - id: C010
+    claim: >-
+      No labelling and no scraped corpus: training pairs are synthesised from the
+      registry alone.
+    source: "README.md#training-data-is-synthesised-from-the-registry"
+    evidence:
+      - type: script
+        ref: "scripts/verify_dataset_split.py"
+        timeout_seconds: 60
+
+  - id: C011
+    claim: >-
+      The output space is enumerable — 504 legal programs (6 legal cohort targets
+      x 21 legal measure names x 3 dimensions, each program grouped or ungrouped).
+      REWORDED: the README previously stated 744 legal programs, a figure
+      derivable from no committed registry state.
+    source: "README.md#training-data-is-synthesised-from-the-registry"
+    evidence:
+      - type: script
+        ref: "scripts/verify_registry_space.py"
+        timeout_seconds: 60
+
+  - id: C012
+    claim: >-
+      The committed data/ split is 882 train / 294 held out — the five-measure-era
+      snapshot the adapter was trained and evaluated on. gen_pairs.py regenerates
+      the split from whatever registry is in the tree. REWORDED: the README
+      command comment previously implied the current command yields 882/294.
+    source: "README.md#run-it"
+    evidence:
+      - type: script
+        ref: "scripts/verify_dataset_split.py"
+        timeout_seconds: 60
+      - type: artifact_hash
+        ref: "data/train.jsonl"
+        sha256: "54fbd10c00dba160616972944f3cb89a4f90b420adf1b96d438f876153bc4a4f"
+      - type: artifact_hash
+        ref: "data/test.jsonl"
+        sha256: "734657fc93487f3acb35fa84f1aff5f3b4c49ae690a2455d8d580504103b9b12"
+
+  - id: C013
+    claim: >-
+      The split is by template, not random: the held-out set uses four phrasings
+      — rank {d} by {c}, I need {m} on {c}, and two others — that appear nowhere
+      in training.
+    source: "README.md#training-data-is-synthesised-from-the-registry"
+    evidence:
+      - type: script
+        ref: "scripts/verify_dataset_split.py"
+        timeout_seconds: 60
+
+  - id: C014
+    claim: >-
+      The model never sees a row, a number, or a table name: fine-tuning on rows
+      produces fluent wrong numbers, this trains a mapping, not a memory.
+    source: "README.md#what-this-is-not"
+    evidence:
+      - type: script
+        ref: "scripts/verify_dataset_split.py"
+        timeout_seconds: 60
+      - type: script
+        ref: "scripts/verify_registry_space.py"
+        timeout_seconds: 60
+
+  - id: C015
+    claim: >-
+      Procurement terms are never emitted bare: the NL prompt vocabulary exposes
+      named definitions such as spend@cash_paid, landed_cost@fully_loaded and
+      value_pool@realizable, preventing silent choice of an accounting boundary.
+    source: "README.md#procurement-metric-qualification"
+    evidence:
+      - type: test
+        ref: "test_registry.py::MetricRegistryTests::test_generator_never_emits_bare_ambiguous_metric"
+      - type: test
+        ref: "test_registry.py::MetricRegistryTests::test_procurement_terms_have_named_definitions"
+      - type: script
+        ref: "scripts/verify_registry_space.py"
+        timeout_seconds: 60
+
+  - id: C016
+    claim: >-
+      Six cohorts — the registry is deliberately small: six legal cohort targets
+      (the three qualified psychiatrist forms plus kol, trial_active,
+      untapped_bench).
+    source: "README.md#six-cohorts"
+    evidence:
+      - type: script
+        ref: "scripts/verify_registry_space.py"
+        timeout_seconds: 60
+
+  - id: C017
+    claim: >-
+      The one residual compile failure is a registry gap, not a model failure:
+      every remaining rejection on the full set is unknown measure rank — 12 of
+      294.
+    source: "README.md#honest-limitations"
+    evidence:
+      - type: manifest_field
+        ref: "evidence/results.json:recorded_run.full_set.rejections_unknown_measure_rank"
+        equals: 12
+      - type: manifest_field
+        ref: "evidence/results.json:recorded_run.full_set.rejections_total"
+        equals: 12
+      - type: script
+        ref: "scripts/verify_results.py"
+        timeout_seconds: 60
+
+  - id: C018
+    claim: >-
+      Paraphrase augmentation through a larger model is the obvious next step and
+      run_api.py --mode paraphrase exists for it.
+    source: "README.md#honest-limitations"
+    evidence:
+      - type: script
+        ref: "scripts/verify_local_inference.py"
+        timeout_seconds: 60
+
+  - id: C019
+    claim: >-
+      The committed adapter fine-tunes Qwen/Qwen2.5-0.5B-Instruct and is a LoRA
+      adapter (PEFT).
+    source: "adapter/README.md"
+    evidence:
+      - type: manifest_field
+        ref: "adapter/adapter_config.json:base_model_name_or_path"
+        equals: "Qwen/Qwen2.5-0.5B-Instruct"
+      - type: manifest_field
+        ref: "adapter/adapter_config.json:peft_type"
+        equals: "LORA"
+      - type: script
+        ref: "scripts/verify_adapter.py"
+        timeout_seconds: 60
