@@ -56,7 +56,7 @@ claims:
         equals: 53.1
       - type: artifact_hash
         ref: "data/test.jsonl"
-        sha256: "0000000000000000000000000000000000000000000000000000000000000000"
+        sha256: "734657fc93487f3acb35fa84f1aff5f3b4c49ae690a2455d8d580504103b9b12"
       - type: script
         ref: "scripts/verify_results.py"
         timeout_seconds: 60
@@ -232,7 +232,7 @@ claims:
         sha256: "54fbd10c00dba160616972944f3cb89a4f90b420adf1b96d438f876153bc4a4f"
       - type: artifact_hash
         ref: "data/test.jsonl"
-        sha256: "0000000000000000000000000000000000000000000000000000000000000000"
+        sha256: "734657fc93487f3acb35fa84f1aff5f3b4c49ae690a2455d8d580504103b9b12"
 
   - id: C013
     claim: >-
